@@ -5,14 +5,14 @@
     <el-row class="main-container">
       <el-col :lg="8" :xs="16" :md="10" :span="10">
         <div class="top">
-          <i class="iconfont icon-kaoshi"></i><span class="title">在线考试系统</span>
+          <i class="iconfont icon-kaoshi"></i><span class="title">OnlineExam</span>
         </div>
         <div class="bottom">
           <div class="container">
-            <p class="title">账号登录</p>
+            <p class="title">登录</p>
             <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
               <el-form-item label="用户名">
-                <el-input v-model.number="formLabelAlign.username" placeholder="请输入用户名"></el-input>
+                <el-input v-model.number="formLabelAlign.username" placeholder="请输入工号/学号"></el-input>
               </el-form-item>
               <el-form-item label="密码">
                 <el-input v-model="formLabelAlign.password" placeholder="请输入密码" type='password'></el-input>
@@ -37,11 +37,6 @@
         <p class="msg2">版权所有 ©2019 <!--重庆文理学院计科2班余晓江--> 保留所有权利  <a href="http://beian.miit.gov.cn/" target="_blank">渝ICP备19001371号</a></p>
       </el-col>
     </el-row>
-    <section class="remind">
-      <span>管理员账号：9527</span>
-      <span>教师账号：20081001</span>
-      <span>密码都是：123456</span>
-    </section>
   </div>
 </template>
 
@@ -54,7 +49,7 @@ export default {
       role: 2,
       labelPosition: 'left',
       formLabelAlign: {
-        username: '20154084',
+        username: '316',
         password: '123456'
       }
     }

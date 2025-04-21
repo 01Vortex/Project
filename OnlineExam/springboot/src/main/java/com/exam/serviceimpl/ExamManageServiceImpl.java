@@ -17,8 +17,8 @@ public class ExamManageServiceImpl implements ExamManageService {
 
 
     @Override
-    public List<ExamManage> findAll() {
-        return examManageMapper.findAll();
+    public List<ExamManage> findAllExamManage() {
+        return examManageMapper.findAllExamManage();
     }
 
     @Override

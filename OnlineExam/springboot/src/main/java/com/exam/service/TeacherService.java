@@ -10,7 +10,7 @@ public interface TeacherService {
 
     IPage<Teacher> findAll(Page<Teacher> page);
 
-    public List<Teacher> findAll();
+    public List<Teacher> findAllTeacher();
 
     public Teacher findById(Integer teacherId);
 

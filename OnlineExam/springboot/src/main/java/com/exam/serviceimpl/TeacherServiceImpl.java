@@ -21,8 +21,8 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public List<Teacher> findAll() {
-        return teacherMapper.findAll();
+    public List<Teacher> findAllTeacher() {
+        return teacherMapper.findAllTeacher();
     }
 
     @Override

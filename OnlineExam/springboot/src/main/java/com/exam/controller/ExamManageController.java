@@ -16,10 +16,10 @@ public class ExamManageController {
     private ExamManageServiceImpl examManageService;
 
     @GetMapping("/exams")
-    public ApiResult findAll(){
+    public ApiResult findAllExamManage(){
         System.out.println("不分页查询所有试卷");
         ApiResult apiResult;
-        apiResult = ApiResultHandler.buildApiResult(200, "请求成功！", examManageService.findAll());
+        apiResult = ApiResultHandler.buildApiResult(200, "请求成功！", examManageService.findAllExamManage());
         return apiResult;
     }
 

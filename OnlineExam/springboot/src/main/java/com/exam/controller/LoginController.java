@@ -4,7 +4,6 @@ import com.exam.entity.*;
 import com.exam.serviceimpl.LoginServiceImpl;
 import com.exam.util.ApiResultHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,8 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LoginController {
 
+    private final LoginServiceImpl loginService;
+
     @Autowired
-    private LoginServiceImpl loginService;
+    public  LoginController(LoginServiceImpl loginService){
+        this.loginService = loginService;
+    }
 
     @PostMapping("/login")
     public ApiResult login(@RequestBody Login login) {

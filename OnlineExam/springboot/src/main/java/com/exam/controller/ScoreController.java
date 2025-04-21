@@ -26,7 +26,7 @@ public class ScoreController {
     @GetMapping("/score/{page}/{size}/{studentId}")
     public ApiResult findById(@PathVariable("page") Integer page, @PathVariable("size") Integer size, @PathVariable("studentId") Integer studentId) {
         Page<Score> scorePage = new Page<>(page, size);
-        IPage<Score> res = scoreService.findById(scorePage, studentId);
+        IPage<Score> res = scoreService.findByIdFy(scorePage, studentId);
         return ApiResultHandler.buildApiResult(200, "根据ID查询成绩", res);
     }
 

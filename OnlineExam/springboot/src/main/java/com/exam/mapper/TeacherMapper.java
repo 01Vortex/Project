@@ -14,7 +14,7 @@ public interface TeacherMapper {
     IPage<Teacher>  findAll(Page page);
 
     @Select("select * from teacher")
-    public List<Teacher> findAll();
+    public List<Teacher> findAllTeacher();
 
     @Select("select * from teacher where teacherId = #{teacherId}")
     public Teacher findById(Integer teacherId);
