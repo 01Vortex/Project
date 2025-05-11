@@ -36,10 +36,18 @@ public class LoginController {
             return "registration";
         }
 
-        userService.registerNewUserAccount(user);
+        try {
+            userService.registerNewUserAccount(user);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("usernameError", e.getMessage()); // 设置用户名重复的错误信息
+            return "registration"; // 注册失败后继续留在注册页面
+        }
+
         model.addAttribute("message", "You have successfully registered! Please log in.");
         return "redirect:/login";
     }
+
+
 
     @GetMapping("/forgot-password")
     public String forgotPassword(Model model) {

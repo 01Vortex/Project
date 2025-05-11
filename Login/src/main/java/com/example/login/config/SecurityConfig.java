@@ -39,7 +39,13 @@ public class SecurityConfig {
                         .invalidateHttpSession(true)        // 使 session 失效
                         .deleteCookies("JSESSIONID")        // 删除 cookie
                         .permitAll()
+                )
+               .sessionManagement(session -> session
+                .maximumSessions(1) // 最大并发会话数为 1
+                .maxSessionsPreventsLogin(true) // 达到上限后阻止新登录
                 );
+
+
         return http.build();
     }
 

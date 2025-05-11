@@ -9,15 +9,42 @@
 <form th:action="@{/register}" method="post" th:object="${user}">
     <div>
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+        <input type="text" id="username" name="username" required th:field="*{username}" />
+        <!-- 显示用户名错误信息 -->
+        <p th:if="${usernameError}" th:text="${usernameError}" style="color: red;"></p>
+        <!-- 用户名校验错误 -->
+        <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: red;"></p>
     </div>
     <div>
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+        <input type="password" id="password" name="password" required oninput="checkPasswordStrength(this.value)" />
+        <p id="password-help" style="color: red; font-size: 0.9em;">
+            密码必须包含：至少8位、大小写字母、数字和特殊字符（如 !@#$%^&* 等）
+        </p>
     </div>
     <button type="submit">Register</button>
 </form>
+
 <a href="/login">Already have an account?</a>
 <p th:text="${message}"></p>
 </body>
+<script>
+    function checkPasswordStrength(password) {
+        const helpText = document.getElementById("password-help");
+        const hasLower = /[a-z]/.test(password);
+        const hasUpper = /[A-Z]/.test(password);
+        const hasDigit = /\d/.test(password);
+        const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+        const isValidLength = password.length >= 8;
+
+        if (isValidLength && hasLower && hasUpper && hasDigit && hasSpecial) {
+            helpText.textContent = "✅ 密码强度合格";
+            helpText.style.color = "green";
+        } else {
+            helpText.textContent = "❌ 密码不符合要求，请检查格式";
+            helpText.style.color = "red";
+        }
+    }
+</script>
+
 </html>

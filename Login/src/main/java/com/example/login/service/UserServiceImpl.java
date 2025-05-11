@@ -21,6 +21,11 @@ public class UserServiceImpl implements UserService {
     }
 
     public void registerNewUserAccount(User user) {
+        // 检查用户名是否存在
+        User existingUser = userMapper.findByUsername(user.getUsername());
+        if (existingUser != null) {
+            throw new IllegalArgumentException("该用户名已被占用，请选择其他用户名");
+        }
         user.setPassword(bcryptPasswordEncoder.encode(user.getPassword()));
         user.setEnabled(true);
         userMapper.insert(user);
