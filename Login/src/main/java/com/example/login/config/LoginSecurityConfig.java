@@ -5,20 +5,38 @@ import com.example.login.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import java.security.SecureRandom;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class LoginSecurityConfig {
+    @Lazy
     @Autowired
     private UserService userService;
+
     @Bean
-    public UserDetailsService userDetailsService() {
-        return username -> userService.loadUserByUsername(username);
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(14, new SecureRandom());
     }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(user -> userService.loadUserByUsername(user)); // 或继续使用 userService
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -34,19 +52,20 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")               // 默认就是 /logout，可选
-                        .logoutSuccessUrl("/login")         // 登出后跳转的页面
-                        .invalidateHttpSession(true)        // 使 session 失效
-                        .deleteCookies("JSESSIONID")        // 删除 cookie
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
-               .sessionManagement(session -> session
-                .maximumSessions(1) // 最大并发会话数为 1
-                .maxSessionsPreventsLogin(true) // 达到上限后阻止新登录
-                );
-
+                .sessionManagement(session -> session
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(false)
+                )
+                .authenticationProvider(authenticationProvider()); // 启用自定义 provider
 
         return http.build();
     }
+
 
 }

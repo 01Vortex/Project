@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.validation.Valid;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class LoginController {
@@ -31,7 +32,11 @@ public class LoginController {
     }
 
     @PostMapping("/register")
-    public String processRegister(@Valid User user, BindingResult result, Model model) {
+    public String processRegister(
+            @Valid User user,
+            BindingResult result,
+            RedirectAttributes redirectAttributes) {
+
         if (result.hasErrors()) {
             return "registration";
         }
@@ -39,13 +44,16 @@ public class LoginController {
         try {
             userService.registerNewUserAccount(user);
         } catch (IllegalArgumentException e) {
-            model.addAttribute("usernameError", e.getMessage()); // 设置用户名重复的错误信息
-            return "registration"; // 注册失败后继续留在注册页面
+            redirectAttributes.addFlashAttribute("usernameError", e.getMessage());
+            return "redirect:/register";
         }
 
-        model.addAttribute("message", "You have successfully registered! Please log in.");
+        // 添加 flash attribute，确保跳转后还能看到提示
+        redirectAttributes.addFlashAttribute("message", "You have successfully registered! Please log in.");
         return "redirect:/login";
     }
+
+
 
 
 

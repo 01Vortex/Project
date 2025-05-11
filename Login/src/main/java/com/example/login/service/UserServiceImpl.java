@@ -2,9 +2,9 @@ package com.example.login.service;
 
 import com.example.login.mapper.UserMapper;
 import com.example.login.model.User;
-import com.example.login.utility.BCryptPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,7 +14,7 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Autowired
-    private BCryptPasswordEncoder bcryptPasswordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     public User loadUserByUsername(String username) {
         return userMapper.findByUsername(username);
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // 密码加密并保存用户
-        user.setPassword(bcryptPasswordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEnabled(true);
         userMapper.insert(user);
     }
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
 
 
-    
+
 
 
 
