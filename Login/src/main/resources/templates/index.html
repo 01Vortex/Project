@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Home</title>
+</head>
+<body>
+<h2>Welcome to the Home Page!</h2>
+
+<!-- 显示当前用户名 -->
+<p th:text="'Logged in as: ' + ${#authentication.principal.username}"></p>
+
+<!-- 登出表单（推荐使用 POST 方法更安全） -->
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Logout" />
+</form>
+</body>
+</html>
