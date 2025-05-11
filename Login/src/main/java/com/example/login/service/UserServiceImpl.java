@@ -37,17 +37,7 @@ public class UserServiceImpl implements UserService {
         user.setEnabled(true);
         userMapper.insert(user);
     }
-
-
-
-
-
-
-
-
-
-
-
+    
 
 
     private boolean isPasswordStrong(String password) {
