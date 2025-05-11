@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,9 +18,15 @@ import java.security.SecureRandom;
 @Configuration
 @EnableWebSecurity
 public class LoginSecurityConfig {
-    @Lazy
-    @Autowired
-    private UserService userService;
+
+private final UserService userService;
+
+     @Lazy
+     @Autowired
+     public LoginSecurityConfig(UserService userService) {
+     this.userService = userService;
+    }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -31,7 +36,7 @@ public class LoginSecurityConfig {
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(user -> userService.loadUserByUsername(user)); // 或继续使用 userService
+        authProvider.setUserDetailsService(userService::loadUserByUsername); // 或继续使用 userService
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
