@@ -9,6 +9,9 @@ public interface UserMapper {
     @Select("SELECT * FROM users WHERE username = #{username}")
     User findByUsername(String username);
 
-    @Insert("INSERT INTO users(username, password) VALUES(#{username}, #{password})")
+    @Insert("INSERT INTO users(username, password,email) VALUES(#{username}, #{password},#{email})")
     void insert(User user);
+
+    @Select("SELECT * FROM users WHERE email = #{email}")
+    User findByEmail(String email);
 }

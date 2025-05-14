@@ -1,7 +1,7 @@
 package com.example.login.config;
 
 
-import com.example.login.service.UserService;
+import com.example.login.service.Interface.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,7 +47,7 @@ private final UserService userService;
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register", "/forgot-password").permitAll()
+                        .requestMatchers("/login", "/register", "/forgot-password ", "/send-code").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

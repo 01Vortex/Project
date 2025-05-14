@@ -2,10 +2,13 @@ package com.example.login.service;
 
 import com.example.login.mapper.UserMapper;
 import com.example.login.model.User;
+import com.example.login.service.Interface.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -16,38 +19,52 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+
+    private static final String VERIFICATION_CODE_PREFIX = "verification_code:";
+    private static final String PENDING_USER_PREFIX = "pending_user:";
+
+    public boolean verifyAndRegister(User user, String code) {
+        // 检查用户名是否已存在
+        if (userMapper.findByUsername(user.getUsername()) != null) {
+            throw new IllegalArgumentException("该用户名已被占用，请选择其他用户名");
+        }
+        // 检查邮箱是否已被注册
+        if (userMapper.findByEmail(user.getEmail()) != null) {
+            throw new IllegalArgumentException("该邮箱已被注册，请输入其他邮箱地址");
+        }
+        Object storedCodeObject =redisTemplate.opsForValue().get(VERIFICATION_CODE_PREFIX + user.getEmail());
+        String storedCodeString = storedCodeObject.toString();
+
+        // 检查验证码是否正确
+        if (storedCodeString == null) return false;
+        if (!storedCodeString.equals(code)) return false;
+        // 插入数据库
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setEnabled(true);
+        userMapper.insert(user);
+        // 清除缓存
+        redisTemplate.delete(VERIFICATION_CODE_PREFIX + user.getEmail());
+        redisTemplate.delete(PENDING_USER_PREFIX + user.getEmail());
+        return true;
+    }
+
     public User loadUserByUsername(String username) {
         return userMapper.findByUsername(username);
     }
 
-    public void registerNewUserAccount(User user) {
-        // 检查用户名是否存在
-        User existingUser = userMapper.findByUsername(user.getUsername());
-        if (existingUser != null) {
-            throw new IllegalArgumentException("该用户名已被占用，请选择其他用户名");
-        }
-
-        // 检查密码是否符合复杂度要求
-        if (!isPasswordStrong(user.getPassword())) {
-            throw new IllegalArgumentException("Password does not meet complexity requirements.");
-        }
-
-        // 密码加密并保存用户
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setEnabled(true);
-        userMapper.insert(user);
-    }
 
 
 
     private boolean isPasswordStrong(String password) {
-    // 检查密码是否包含大小写字母、数字和特殊字符，且长度不少于8位
-    return password != null && password.length() >= 8
-            && password.matches(".*[a-z].*")
-            && password.matches(".*[A-Z].*")
-            && password.matches(".*\\d.*")
-            && password.matches(".*[!@#$%^&*(),.?\":{}|<>].*");
-}
+        return password != null && password.length() >= 8
+                && password.matches(".*[a-z].*")
+                && password.matches(".*[A-Z].*")
+                && password.matches(".*\\d.*")
+                && password.matches(".*[!@#$%^&*(),.?\":{}|<>].*");
+    }
 
 
 }
