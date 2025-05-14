@@ -47,7 +47,7 @@ private final UserService userService;
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register", "/forgot-password ", "/send-code").permitAll()
+                        .requestMatchers("/login", "/register", "/forgot-password", "/send-code", "/reset-password-step1","/reset-password").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
