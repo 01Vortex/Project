@@ -22,14 +22,15 @@ public class VerificationController {
 
     @GetMapping("/send-code")
     @ResponseBody
-    public String sendVerificationCode(@RequestParam String email) {
-        String code = RandomCodeUtil.generateCode();
+    public String sendVerificationCodeWithEmail(@RequestParam String email) {
+        String random_code = RandomCodeUtil.generateCode();
         try {
-            verificationCodeService.sendVerificationCodeWithEmail(email, code);
+            //  发送验证码到输入的email
+            verificationCodeService.sendVerificationCodeWithEmail(email, random_code);
             // 存储验证码到 Redis，设置有效期为 3 分钟
             redisTemplate.opsForValue().set(
-                    "verification_code:" + email,
-                    code,
+                    "VerificationCode:" + email,
+                    random_code,
                     180, TimeUnit.SECONDS
             );
             return "验证码已发送";

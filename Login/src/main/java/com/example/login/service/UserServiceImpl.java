@@ -23,8 +23,8 @@ public class UserServiceImpl implements UserService {
     private RedisTemplate<String, Object> redisTemplate;
 
 
-    private static final String VERIFICATION_CODE_PREFIX = "verification_code:";
-    private static final String PENDING_USER_PREFIX = "verifyAndRegister";
+    private static final String VERIFICATION_CODE_PREFIX = "VerificationCode:";
+
 
     public boolean verifyAndRegister(User user, String input_code) {
         // 检查用户名是否已存在
@@ -47,7 +47,6 @@ public class UserServiceImpl implements UserService {
         userMapper.insert(user);
         // 清除缓存
         redisTemplate.delete(VERIFICATION_CODE_PREFIX + user.getEmail());
-        redisTemplate.delete(PENDING_USER_PREFIX + user.getEmail());
         return true;
     }
 
@@ -65,6 +64,4 @@ public class UserServiceImpl implements UserService {
             userMapper.updatePasswordByPhone(phone,passwordEncoder.encode(newPassword));
         }
     }
-
-
 }

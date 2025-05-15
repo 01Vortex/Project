@@ -19,8 +19,8 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
-    private static final String VERIFICATION_CODE_PREFIX = "verification_code:";
-    private static final String PENDING_USER_PREFIX = "ValidateEmailOrPhoneCode";
+
+    private static final String VERIFICATION_CODE_PREFIX = "VerificationCode:";
 
 
     public void sendVerificationCodeWithEmail(String target_email, String generate_code) {
@@ -32,16 +32,15 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
         javaMailSender.send(message);
     }
 
-    public boolean validateVerificationCode(String email_phone, String cached_code) {
+    public boolean validateVerificationCode(String email_phone, String input_code) {
         //缓存里的验证码
         Object storedCodeObject = redisTemplate.opsForValue().get(VERIFICATION_CODE_PREFIX + email_phone);
         String storedCodeString = storedCodeObject.toString();
         // 检查验证码是否正确
         if (storedCodeString == null) return false;
-        if (!storedCodeString.equals(cached_code)) return false;
+        if (!storedCodeString.equals(input_code)) return false;
         // 清除缓存
         redisTemplate.delete(VERIFICATION_CODE_PREFIX + email_phone);
-        redisTemplate.delete(PENDING_USER_PREFIX + email_phone);
         return true;
     }
 }

@@ -46,8 +46,10 @@ private final UserService userService;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+
+                .csrf(csrf -> csrf.disable())  // 关闭 CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register", "/forgot-password", "/send-code", "/reset-password-step1","/reset-password").permitAll()
+                        .requestMatchers("/login", "/register", "/forgot-password", "/send-code","/reset-password").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -68,6 +70,7 @@ private final UserService userService;
                         .maxSessionsPreventsLogin(false)
                 )
                 .authenticationProvider(authenticationProvider()); // 启用自定义 provider
+
 
         return http.build();
     }
