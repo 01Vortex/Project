@@ -7,7 +7,7 @@ public interface UserService {
 
     void resetPassword(String email_phone, String newPassword);
 
-    boolean verifyAndRegister(User user, String input_code);
+    void createAccount(User user);
 
 
     }

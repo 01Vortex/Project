@@ -9,7 +9,7 @@ public class DataValidationUtil {
             if (email == null || email.isEmpty()) {
                 return false;
             }
-            String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+            String emailRegex = "^(?:[\\u4e00-\\u9fa5\\w\\.!#%&'*+/=?^`{|}~-]+)@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,})$";
             Pattern pattern = Pattern.compile(emailRegex);
             return pattern.matcher(email).matches();
         }
@@ -32,18 +32,25 @@ public class DataValidationUtil {
             if (password == null || password.isEmpty()) {
                 return false;
             }
-            String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$";
+            String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*+=]).{8,}$";
             Pattern pattern = Pattern.compile(passwordRegex);
             return pattern.matcher(password).matches();
         }
-        public static boolean isValidUsername(String username) {
-            if (username == null || username.isEmpty()) {
-                return false;
-            }
-            String usernameRegex = "^[a-zA-Z0-9_-]{3,16}$";
-            Pattern pattern = Pattern.compile(usernameRegex);
-            return pattern.matcher(username).matches();
+
+    public static boolean isValidUsername(String username) {
+        if (username == null || username.isEmpty()|| username.length()>12) {
+            return false;
         }
+        //支持 字母（a-zA-Z）、数字（0-9）、点号（.）、下划线（_）、短横线（-）；
+        //新增支持中文字符。
+        String usernameRegex = "^[\\u4e00-\\u9fa5a-zA-Z0-9._-]{1,12}$";
+        Pattern pattern = Pattern.compile(usernameRegex);
+        return pattern.matcher(username).matches();
+    }
+
+
+
+
 
     }
 

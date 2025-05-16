@@ -4,7 +4,23 @@ import java.util.Random;
 
 public class RandomCodeUtil {
 
-    public static String generateCode() {
-        return String.format("%06d", new Random().nextInt(999999));
-    }
+public static String generateCode() {
+    return String.valueOf(100000 + new Random().nextInt(900000));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

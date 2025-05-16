@@ -9,9 +9,11 @@ public interface VerificationCodeService {
    //  void sendVerificationCodeWithPhone(String target_phone, String generate_code);
 
 
-       //根据email_phone从缓存取出对应的验证码，进行验证
+       // 根据email_phone从缓存取出对应的验证码,进行验证
        boolean validateVerificationCode(String email_phone, String input_code);
 
- //    void sendVerificationCodeByPhone();
+       // 存储验证码到 Redis,设置有效期为3分钟,key的前缀一定要和验证时的前缀一样
+       void storeVerificationCodeToRedis(String email_phone, String random_code);
+
 
     }

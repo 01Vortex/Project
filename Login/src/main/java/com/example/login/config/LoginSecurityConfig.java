@@ -47,7 +47,7 @@ private final UserService userService;
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
 
-                .csrf(csrf -> csrf.disable())  // 关闭 CSRF
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/register", "/forgot-password", "/send-code","/reset-password").permitAll()
                         .anyRequest().authenticated()
@@ -65,6 +65,10 @@ private final UserService userService;
                         .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
+               /* .rememberMe(remember -> remember
+                        .key("yourUniqueKey") // 可以自定义 key，默认使用安全随机生成的 key
+                        .tokenValiditySeconds(86400) // 设置 token 过期时间（秒），默认为 14 天
+                )*/
                 .sessionManagement(session -> session
                         .maximumSessions(1)
                         .maxSessionsPreventsLogin(false)
