@@ -13,6 +13,7 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private String email;
+    private String role;
     private boolean enabled;
     private String phone_number;
     private Collection<? extends GrantedAuthority> authorities;
