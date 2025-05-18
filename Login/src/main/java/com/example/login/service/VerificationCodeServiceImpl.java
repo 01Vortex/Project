@@ -2,6 +2,10 @@ package com.example.login.service;
 
 
 
+import com.aliyuncs.IAcsClient;
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
+import com.aliyuncs.exceptions.ClientException;
 import com.example.login.service.Interface.VerificationCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -23,19 +27,38 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
+    @Autowired
+    private IAcsClient iAcsClient;
+
 
     private static final String VERIFICATION_CODE_PREFIX = "VerificationCodeWithEmail:";
 
     private static final Logger logger = LogManager.getLogger(VerificationCodeServiceImpl.class);
 
 
-    public void sendVerificationCodeWithEmail(String target_email, String generate_code) {
+    public void sendVerificationCodeWithEmail(String target_email, String random_code) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("2901449366@qq.com");
         message.setTo(target_email);
         message.setSubject("您的注册验证码");
-        message.setText("验证码：" + generate_code + "，请勿泄露给他人。");
+        message.setText("验证码：" + random_code + "，请勿泄露给他人。");
         javaMailSender.send(message);
+    }
+
+    public void sendVerificationCodeWithPhone(String targetPhone, String random_code) {
+        SendSmsRequest request = new SendSmsRequest();
+        request.setPhoneNumbers(targetPhone);
+        request.setSignName("你的短信签名"); // 如：阿里云测试
+        request.setTemplateCode("你的模板CODE"); // 如：SMS_123456789
+        request.setTemplateParam("{\"code\":\"" + random_code + "\"}");
+
+        try {
+            SendSmsResponse response = iAcsClient.getAcsResponse(request);
+            logger.info("短信发送成功: {}", response.getMessage());
+        } catch (ClientException e) {
+            logger.error("短信发送失败，错误码: {}, 错误信息: {}", e.getErrCode(), e.getMessage());
+            throw new RuntimeException("短信验证码发送失败，请稍后再试。", e);
+        }
     }
 
 

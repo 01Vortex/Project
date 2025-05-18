@@ -20,7 +20,6 @@ import java.util.Collection;
 @Service
 public class UserServiceImpl implements UserService , UserDetailsService {
 
-    private static final Logger log = LogManager.getLogger(UserServiceImpl.class);
     @Autowired
     private UserMapper userMapper;
 
@@ -46,6 +45,7 @@ public class UserServiceImpl implements UserService , UserDetailsService {
         user.setRole("ROLE_USER");
         user.setEnabled(true);
         userMapper.createNewAccount(user);
+        logger.info("用户 {} 创建成功", user.getUsername());
     }
 
     // 重置密码
@@ -54,18 +54,15 @@ public class UserServiceImpl implements UserService , UserDetailsService {
         if(email_phone.contains("@")){
             String email = email_phone;
             userMapper.updatePasswordByEmail(email,passwordEncoder.encode(newPassword));
+            logger.info("邮箱 {} 的密码已重置", email);
         }
         else{
             String phone = email_phone;
             userMapper.updatePasswordByPhone(phone,passwordEncoder.encode(newPassword));
+            logger.info("手机号 {} 的密码已重置", phone);
         }
     }
 
-    // 自定义查找用户方法
-    @Override
-    public User findUserByUsername(String username) {
-        return userMapper.findByUsername(username);
-    }
 
     // 实现SpringSecurity的查找用户方法
     @Override
@@ -80,6 +77,7 @@ public class UserServiceImpl implements UserService , UserDetailsService {
                 getAuthorities(user)
         );
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities(User user) {
         String role = user.getRole();
