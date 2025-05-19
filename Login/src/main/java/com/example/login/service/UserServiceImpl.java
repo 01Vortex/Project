@@ -20,13 +20,19 @@ import java.util.Collection;
 @Service
 public class UserServiceImpl implements UserService , UserDetailsService {
 
-    @Autowired
-    private UserMapper userMapper;
 
-    @Autowired
+    private UserMapper userMapper;
     private PasswordEncoder passwordEncoder;
 
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
+
+
+    @Autowired
+    public UserServiceImpl(PasswordEncoder passwordEncoder,UserMapper userMapper){
+        this.passwordEncoder = passwordEncoder;
+        this.userMapper = userMapper;
+    }
+
 
 
     // 创建账号
@@ -78,6 +84,7 @@ public class UserServiceImpl implements UserService , UserDetailsService {
         );
     }
 
+    // 根据用户角色获取权限
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities(User user) {
         String role = user.getRole();

@@ -11,6 +11,8 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.thymeleaf.spring6.SpringTemplateEngine;
+
 
 @Configuration  //如未使用,扫不到该类的Bean
 public class SpringBeanConfig {
@@ -49,6 +51,12 @@ public class SpringBeanConfig {
         }
         return new DefaultAcsClient(profile);
     }
+
+    // SpringTemplateEngine
+/*    @Bean
+    public SpringTemplateEngine springTemplateEngine() {
+        return new SpringTemplateEngine();
+    }*/
 
 
 

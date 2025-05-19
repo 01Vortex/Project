@@ -17,12 +17,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class LoginController {
 
-    @Autowired
     private UserService userService;
-    @Autowired
     private VerificationCodeService verificationCodeService;
-    @Autowired
     private RedisTemplate<String, String> redisTemplate; // 注入 Redis 模板
+
+    @Autowired
+    public LoginController(UserService userService, VerificationCodeService verificationCodeService, RedisTemplate<String, String> redisTemplate) {
+        this.userService = userService;
+        this.verificationCodeService = verificationCodeService;
+        this.redisTemplate = redisTemplate;
+    }
 
     @GetMapping("/index")
     public String index() {
@@ -32,6 +36,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String login(Model model) {
+        System.out.println("正在进入登录页面");
         return "login";
     }
 
