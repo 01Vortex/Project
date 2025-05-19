@@ -9,6 +9,7 @@ import com.aliyuncs.exceptions.ClientException;
 import com.example.login.service.Interface.VerificationCodeService;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,10 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
     private RedisTemplate<String, Object> redisTemplate;
     private IAcsClient iAcsClient;
     private SpringTemplateEngine templateEngine;
+
+    @Value("${spring.mail.username}")
+    private String senderEmail;
+    
 
     // 验证码缓存的键前缀
     private static final String VERIFICATION_CODE_PREFIX = "VerificationCodeWithEmail:";
@@ -53,7 +58,7 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             // 设置发件人、收件人、主题等
-            helper.setFrom("2901449366@qq.com");
+            helper.setFrom(senderEmail);
             helper.setTo(target_email);
             helper.setSubject("验证您的电子邮件");
 
