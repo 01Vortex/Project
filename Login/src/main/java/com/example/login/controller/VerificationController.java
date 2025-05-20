@@ -16,8 +16,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class VerificationController {
+
+    private final VerificationCodeService verificationCodeService;
+
     @Autowired
-    private VerificationCodeService verificationCodeService;
+    public VerificationController(VerificationCodeService verificationCodeService){
+        this.verificationCodeService = verificationCodeService;
+    }
 
     private static final Logger logger = LogManager.getLogger(VerificationController.class);
 

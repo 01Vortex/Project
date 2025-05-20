@@ -20,9 +20,9 @@ import java.util.Collection;
 @Service
 public class UserServiceImpl implements UserService , UserDetailsService {
 
-
-    private UserMapper userMapper;
-    private PasswordEncoder passwordEncoder;
+    // 将 userMapper 和 passwordEncoder 声明为 final，并在构造函数中初始化。这样可以确保注入后不可变，提高类的安全性和可读性。
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
@@ -57,15 +57,14 @@ public class UserServiceImpl implements UserService , UserDetailsService {
     // 重置密码
     @Override
     public void resetPassword(String email_phone, String newPassword){
+        // 判断是邮箱还是手机号
         if(email_phone.contains("@")){
-            String email = email_phone;
-            userMapper.updatePasswordByEmail(email,passwordEncoder.encode(newPassword));
-            logger.info("邮箱 {} 的密码已重置", email);
+            userMapper.updatePasswordByEmail(email_phone,passwordEncoder.encode(newPassword));
+            logger.info("邮箱 {} 的密码已重置", email_phone);
         }
         else{
-            String phone = email_phone;
-            userMapper.updatePasswordByPhone(phone,passwordEncoder.encode(newPassword));
-            logger.info("手机号 {} 的密码已重置", phone);
+            userMapper.updatePasswordByPhone(email_phone,passwordEncoder.encode(newPassword));
+            logger.info("手机号 {} 的密码已重置", email_phone);
         }
     }
 

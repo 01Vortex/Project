@@ -5,7 +5,7 @@ import com.example.login.service.Interface.VerificationCodeService;
 import com.example.login.service.Interface.UserService;
 import com.example.login.utility.DataValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,15 +17,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class LoginController {
 
-    private UserService userService;
-    private VerificationCodeService verificationCodeService;
-    private RedisTemplate<String, String> redisTemplate; // 注入 Redis 模板
+    private final UserService userService;
+    private final VerificationCodeService verificationCodeService;
 
     @Autowired
-    public LoginController(UserService userService, VerificationCodeService verificationCodeService, RedisTemplate<String, String> redisTemplate) {
+    public LoginController(UserService userService, VerificationCodeService verificationCodeService) {
         this.userService = userService;
         this.verificationCodeService = verificationCodeService;
-        this.redisTemplate = redisTemplate;
     }
 
     @GetMapping("/index")

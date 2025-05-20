@@ -27,10 +27,10 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class VerificationCodeServiceImpl implements VerificationCodeService {
 
-    private JavaMailSender javaMailSender;
-    private RedisTemplate<String, Object> redisTemplate;
-    private IAcsClient iAcsClient;
-    private SpringTemplateEngine templateEngine;
+    private final JavaMailSender javaMailSender;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final IAcsClient iAcsClient;
+    private final SpringTemplateEngine templateEngine;
 
     @Value("${spring.mail.username}")
     private String senderEmail;
