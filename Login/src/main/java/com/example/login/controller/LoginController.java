@@ -4,6 +4,8 @@ import com.example.login.model.User;
 import com.example.login.service.Interface.VerificationCodeService;
 import com.example.login.service.Interface.UserService;
 import com.example.login.utility.DataValidationUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,9 @@ public class LoginController {
 
     private final UserService userService;
     private final VerificationCodeService verificationCodeService;
+
+    private static final Logger logger = LogManager.getLogger(LoginController.class);
+
 
     @Autowired
     public LoginController(UserService userService, VerificationCodeService verificationCodeService) {
@@ -87,10 +92,9 @@ public class LoginController {
     // 重置密码 开启跨域接收不到请求
     @PostMapping("/reset-password")
     public String resetPassword(@RequestParam String email, @RequestParam String code, @RequestParam String newPassword) {
-        System.out.println(email+code+newPassword);
         //  数据验证 函数一般返回合法即true  !函数返回false
         if (!(DataValidationUtil.isValidEmail(email) || DataValidationUtil.isValidPassword(newPassword))) {
-            System.out.println("数据验证失败");
+            logger.error("数据验证失败");
             return "redirect:/forgot-password";
         }
 
@@ -98,6 +102,7 @@ public class LoginController {
         if (verificationCodeService.validateVerificationCode(email, code)) {
             userService.resetPassword(email, newPassword);
         }
+        logger.info("密码重置成功");
         return "redirect:/login";
     }
 

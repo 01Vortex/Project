@@ -75,8 +75,8 @@ public class LoginSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, UserServiceImpl userServiceImpl) throws Exception {
         http
-
-                .csrf(Customizer.withDefaults())  //.csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable())
+             //   .csrf(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/register", "/forgot-password", "/send-code-email", "/send-code-phone","/reset-password").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")

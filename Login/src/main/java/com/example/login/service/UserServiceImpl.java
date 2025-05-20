@@ -21,6 +21,7 @@ import java.util.Collection;
 public class UserServiceImpl implements UserService , UserDetailsService {
 
     // 将 userMapper 和 passwordEncoder 声明为 final，并在构造函数中初始化。这样可以确保注入后不可变，提高类的安全性和可读性。
+    //实例调用函数用用final
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
