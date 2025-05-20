@@ -34,7 +34,6 @@ public class LoginController {
 
     @GetMapping("/login")
     public String login(Model model) {
-        System.out.println("正在进入登录页面");
         return "login";
     }
 
@@ -98,7 +97,6 @@ public class LoginController {
         // 验证码校验并重置密码
         if (verificationCodeService.validateVerificationCode(email, code)) {
             userService.resetPassword(email, newPassword);
-            System.out.println("密码重置成功");
         }
         return "redirect:/login";
     }

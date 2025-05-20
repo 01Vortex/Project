@@ -1,7 +1,7 @@
 package com.example.login.config;
 
 
-import com.example.login.service.Interface.UserService;
+
 import com.example.login.service.UserServiceImpl;
 import com.example.login.utility.RandomCodeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.config.Customizer;
 
 
 import javax.sql.DataSource;
@@ -28,17 +29,16 @@ import java.security.SecureRandom;
 @EnableWebSecurity
 public class LoginSecurityConfig {
 
-    private final UserService userService;
 
     private final UserDetailsService userDetailsService;
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
 
     @Lazy
     @Autowired
-    public LoginSecurityConfig(UserService userService, UserDetailsService userDetailsService,DataSource dataSource) {
-     this.userService = userService;
+    public LoginSecurityConfig(UserDetailsService userDetailsService,DataSource dataSource) {
+
      this.userDetailsService = userDetailsService;
      this.dataSource  = dataSource;
 
@@ -64,10 +64,11 @@ public class LoginSecurityConfig {
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService::loadUserByUsername);
+        authProvider.setUserDetailsService(userDetailsService); // 修复点：直接设置 UserDetailsService 实例
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
+
 
 
     // 配置 HttpSecurity，用于配置认证和授权
@@ -75,7 +76,7 @@ public class LoginSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, UserServiceImpl userServiceImpl) throws Exception {
         http
 
-                .csrf(csrf -> csrf.disable())
+                .csrf(Customizer.withDefaults())  //.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/register", "/forgot-password", "/send-code-email", "/send-code-phone","/reset-password").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")

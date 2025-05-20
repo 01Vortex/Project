@@ -1,9 +1,6 @@
 package com.example.login.config;
 
-import com.aliyuncs.DefaultAcsClient;
-import com.aliyuncs.IAcsClient;
-import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.profile.DefaultProfile;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,21 +43,6 @@ public class SpringBeanConfig {
     }
 
     // 阿里云短信客户端
-    @Bean
-    public IAcsClient iAcsClient() {
-        DefaultProfile profile = DefaultProfile.getProfile(
-                "cn-hangzhou", // 地域ID
-                "smsKeyId", // 替换为你的 AccessKeyId
-                "smsSecret" // 替换为你的 AccessKeySecret
-        );
-
-        try {
-            DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", "Dysmsapi", "dysmsapi.aliyuncs.com");
-        } catch (ClientException e) {
-            throw new RuntimeException(e);
-        }
-        return new DefaultAcsClient(profile);
-    }
 
 
 
