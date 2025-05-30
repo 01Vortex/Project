@@ -1,8 +1,8 @@
 package com.example.login.controller;
 
 import com.example.login.model.User;
-import com.example.login.service.Interface.VerificationCodeService;
-import com.example.login.service.Interface.UserService;
+import com.example.login.service.VerificationCodeService;
+import com.example.login.service.UserService;
 import com.example.login.utility.DataValidationUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
