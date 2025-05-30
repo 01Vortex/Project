@@ -1,9 +1,0 @@
-   ___   _ __     __            _
-  / _ \ / |\ \   / /___   _ __ | |_  ___ __  __
- | | | || | \ \ / // _ \ | '__|| __|/ _ \\ \/ /
- | |_| || |  \ V /| (_) || |   | |_|  __/ >  <
-  \___/ |_|   \_/  \___/ |_|    \__|\___|/_/\_\
-
-Application Version: ${AnsiColor.BLUE}${AnsiStyle.BOLD}1.0.0${AnsiColor.DEFAULT}
-Spring Boot Version: ${AnsiColor.GREEN}${AnsiStyle.BOLD}${spring-boot.version}${AnsiColor.DEFAULT}
-
