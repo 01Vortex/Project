@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/Austin/austin-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Austin/austin-cron/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Austin/austin-data-house/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Austin/austin-handler/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Austin/austin-service-api-impl/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Austin/austin-service-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Austin/austin-stream/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Austin/austin-support/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Austin/austin-web/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Austin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Austin/src/main/resources" charset="UTF-8" />
+  </component>
+</project>
