@@ -9,14 +9,15 @@
 
     <springProperty scope="context" name="grayLogIp" source="austin.graylog.ip"/>
 
-
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <!-- 使用 %highlight() 方法为不同日志级别添加 ANSI 颜色 -->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level){FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue} %logger{50} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%level){FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=cyan} %logger{50} - %replace(%msg){'(ERROR|WARN|INFO|DEBUG)', '\u001B[38;5;%+b$m$1\u001B[0m'}%nopex%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>
+
+
+
 
 
 

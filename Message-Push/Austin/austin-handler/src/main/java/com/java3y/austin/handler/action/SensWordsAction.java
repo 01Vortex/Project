@@ -53,13 +53,13 @@ public class SensWordsAction implements BusinessProcess<TaskInfo> {
                 pushContentModel.setContent(filter(pushContentModel.getContent(), sensDict));
                 break;
             // SMS
-            case 30:
+            case 40:
                 SmsContentModel smsContentModel =
                         (SmsContentModel) context.getProcessModel().getContentModel();
                 smsContentModel.setContent(filter(smsContentModel.getContent(), sensDict));
                 break;
             // EMAIL
-            case 40:
+            case 30:
                 EmailContentModel emailContentModel =
                         (EmailContentModel) context.getProcessModel().getContentModel();
                 emailContentModel.setContent(filter(emailContentModel.getContent(), sensDict));

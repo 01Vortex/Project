@@ -14,6 +14,8 @@ public class OfficialAccountParamConstant {
     public static final String RAW = "raw";
     public static final String AES = "aes";
     public static final String MSG_SIGNATURE = "msg_signature";
+
+
     /**
      * 处理器名
      */

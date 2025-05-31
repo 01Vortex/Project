@@ -44,4 +44,7 @@ public class GroupIdMappingUtils {
         String msgCodeEn = EnumUtil.getEnumByCode(taskInfo.getMsgType(), MessageType.class).getCodeEn();
         return channelCodeEn + "." + msgCodeEn;
     }
+
+
+
 }
