@@ -27,3 +27,6 @@
 *.md linguist-ignore=true
 docs/ linguist-ignore=true
 vendor/ linguist-ignore=true
+
+
+*.html linguist-detectable=false
