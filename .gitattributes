@@ -1,32 +1,28 @@
-# 告诉 Linguist 使用这些扩展名作为对应语言
-*.py linguist-language=Python
+# 强制指定常见代码文件的语言类型
+*.vue linguist-language=Vue
 *.js linguist-language=JavaScript
-*.java linguist-language=Java
-*.cpp linguist-language=C++
-*.c linguist-language=C
-*.cs linguist-language=C#
-*.rb linguist-language=Ruby
-*.php linguist-language=PHP
-*.swift linguist-language=Swift
-*.go linguist-language=Go
-*.rs linguist-language=Rust
 *.ts linguist-language=TypeScript
-*.html linguist-language=HTML
+*.java linguist-language=Java
 *.css linguist-language=CSS
-*.sql linguist-language=SQL
-*.r linguist-language=R
-*.m linguist-language=Objective-C
-*.mm linguist-language=Objective-C++
-*.scala linguist-language=Scala
-*.kt linguist-language=Kotlin
-*.dart linguist-language=Dart
-*.sh linguist-language=Shell
+*.html linguist-language=HTML
+*.json linguist-language=JSON
 
-# 排除特定文件或目录
+# 排除构建产物或大文件（避免干扰统计）
+/dist/ linguist-ignore=true
+/build/ linguist-ignore=true
+/target/ linguist-ignore=true
+/node_modules/ linguist-ignore=true
+/public/ linguist-ignore=true
+/assets/ linguist-ignore=true
+/static/ linguist-ignore=true
+
+# 忽略日志、压缩包等非源码文件
 *.log linguist-ignore=true
-*.md linguist-ignore=true
-docs/ linguist-ignore=true
-vendor/ linguist-ignore=true
+*.gz linguist-ignore=true
+*.zip linguist-ignore=true
+*.jar linguist-ignore=true
+*.war linguist-ignore=true
 
-
-*.html linguist-detectable=false
+# 避免混淆的模板文件
+*.ejs linguist-detectable=false
+*.j2 linguist-detectable=false
