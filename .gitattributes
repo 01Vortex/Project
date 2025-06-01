@@ -26,3 +26,8 @@
 # 避免混淆的模板文件
 *.ejs linguist-detectable=false
 *.j2 linguist-detectable=false
+
+# 指定各子目录的语言主导
+Like-System/**/* linguist-language=Vue
+Message-Push/**/* linguist-language=Java
+WeBlog/**/* linguist-language=Vue
