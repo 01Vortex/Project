@@ -6,9 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.lionsoul.ip2region.xdb.Searcher;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import org.lionsoul.ip2region.xdb.Searcher;
+import java.io.InputStream;
 
 
 /**
@@ -65,54 +69,39 @@ public class AgentRegionUtils {
      * @param ip 访问ip
      * @return 返回归属地结果
      */
+
+
     public static String getIpRegion(String ip, String xdbPath) {
-        // 1、创建 searcher 对象
-        String country = "中国";
-        String hdu = "0";
-        Searcher searcher;
-        try {
-            searcher = Searcher.newWithFileOnly(xdbPath);
-        } catch (IOException e) {
-            log.error("failed to create searcher with {}: {}\n", xdbPath, e);
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip) ||
+                "127.0.0.1".equals(ip) || "::1".equals(ip) || "0:0:0:0:0:0:0:1".equals(ip)) {
+            return "局域网";
+        }
+
+        try (InputStream is = AgentRegionUtils.class.getClassLoader().getResourceAsStream("ip2region.xdb")) {
+            if (is == null) {
+                log.error("ip2region.xdb 文件未找到，请确认已放置在 resources 目录下");
+                return "未知";
+            }
+
+            byte[] cBuff = readStream(is);
+            Searcher searcher = Searcher.newWithBuffer(cBuff);
+            return searcher.search(ip);
+        } catch (Exception e) {
+            log.error("IP归属地查询失败，IP地址：{}", ip, e);
             return "外太空";
         }
-
-        // 2、查询 ip = "175.24.184.183";
-        try {
-            String region = searcher.search(ip);
-            region = region.replace("|", " ");
-            String[] cityList = region.split(" ");
-            if (cityList.length > 0) {
-                // 国内的显示到具体的省
-                if (country.equals(cityList[0])) {
-                    if (cityList.length > 1) {
-                        log.info(cityList[0]+"-"+cityList[2]+"-"+cityList[3]+"-"+cityList[4]);
-                        return cityList[0]+"-"+cityList[2]+"-"+cityList[3]+"-"+cityList[4];
-                    }
-                } else if (hdu.equals(cityList[0])) {
-                    return "中国-浙江省-杭州市-HDU";
-                } else {
-                    // 国外显示到国家城市
-                    if (cityList.length > 1) {
-                        return cityList[0]+"-"+cityList[2];
-                    }
-                }
-
-            }
-        } catch (Exception e) {
-            log.error("failed to search({}): {}\n", ip, e);
-            throw new BizException(ResponseCodeEnum.AGENT_REGION_SEARCH_ERROR);
-        } finally {
-            // 3、关闭资源
-            try {
-                searcher.close();
-            } catch (IOException e) {
-                log.error("failed to close searcher:", e);
-            }
-        }
-
-        // 备注：并发使用，每个线程需要创建一个独立的 searcher 对象单独使用。
-
-        return "未知";
     }
+
+
+// 辅助方法：将 InputStream 读为 byte[]
+private static byte[] readStream(InputStream is) throws Exception {
+    byte[] buffer = new byte[1024];
+    int len;
+    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+    while ((len = is.read(buffer)) != -1) {
+        bos.write(buffer, 0, len);
+    }
+    return bos.toByteArray();
+}
+
 }

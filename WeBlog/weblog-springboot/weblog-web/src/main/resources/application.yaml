@@ -31,13 +31,13 @@ jwt:
 # minio (上传图片需要，需配置成自己的地址)
 #=================================================================
 minio:
-  endpoint: https://img.xxx.com
-  accessKey: xxx
-  secretKey: xxx
-  bucketName: xxx
+  endpoint: http://localhost:9000
+  accessKey: 01Vortex
+  secretKey: 193510193510
+  bucketName: weblog
 
 #=================================================================
 # IP归属地信息库文件路径 ip2region.xdb
 #=================================================================
 xdb:
-  profile: xxx
+  path: src/main/resources/ip2region.xdb

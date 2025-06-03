@@ -50,8 +50,9 @@ public class ApiOperationLogAspect {
     /**
      * todo ip2region.xdb库对应的文件路径，需在配置文件中写入
      */
-    @Value("${xdb.profile}")
+    @Value("${xdb.path}")
     private String xdbPath;
+
 
     @Resource
     private VisitorMapper visitorMapper;
@@ -79,14 +80,20 @@ public class ApiOperationLogAspect {
         log.info("========== 请求开始: [{}], 入参: {} =================================== ", methodDescription, toJson(joinPoint));
         log.warn("请求的类: {}, 方法: {}", joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName());
 
-        // 根据request 获取ip地址并查询归属地
+        // 根据request 获取ip地址并查询归属地(对本地ip过滤)
         String ipAddress = getIpAddress(request);
+        if ("127.0.0.1".equals(ipAddress) || "::1".equals(ipAddress) || "0:0:0:0:0:0:0:1".equals(ipAddress)) {
+            log.warn("忽略本地请求，IP地址为：{}", ipAddress);
+            return;
+        }
         if (!AGENT_IP.containsKey(ipAddress)) {
 
             VisitorRecordDO visitorRecordDO = new VisitorRecordDO();
             String region = getIpRegion(ipAddress, xdbPath);
+
             // 将新的访客IP和归属地信息放入map
             AGENT_IP.put(ipAddress, region);
+
 
             Date date = new Date();
             visitorRecordDO.setVisitor("agent");
